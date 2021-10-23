@@ -2,8 +2,8 @@
 import os
 import re
 from libraries import colors
-from libraries import functions
 from libraries.functions import *
+from libraries.errorChecks import *
 
 # ---------------------Variables ---------------------------
 
@@ -21,24 +21,22 @@ possibleSections = ['section1','section2', 'section3']
 
 
 # ---------------------Start Actual App ---------------------
-
-# -- Get injection section
+cleanHtml()
+#Get injection section
 print('\n{.Bold}Enter Section:{.ResetAll}'.format(textColors, textColors))
 section = input()
-# Check if section is allowed and if not valid, exit
-if section not in possibleSections:    
-    print ('{.Red}\n----------------- ERROR------------------\n\nYour Inputted Section {.White}{SELECTION}{.Red} Does Not Exist\n'.format(textColors,textColors,textColors, SELECTION = "'" +section + "'"))
-    print ('{.Yellow}{Message}{.White}{Options}'.format(textColors, textColors, Message = "Please Choose From The Following Sections:\n", Options = appendPossbileSections(possibleSections)))
-    print ('{.Red}\n------------ EXITING PROGRAM ------------\n{.ResetAll}'.format(textColors, textColors))
+
+#Check if section is valid
+if section == "":
+    section = "section1"
+if sectionErrorCheck(section, possibleSections) == false:
     exit()
 
-# -- Get Injection Element
-print('{.Bold}Enter Element Type:{.ResetAll}'.format(textColors, textColors))
-element = input()
+#Get Injection Element and contents
+elementType = question("Enter Element Type")
 
-# -- Get injection phrase
-print('{.Bold}Enter Phrase:{.ResetAll}'.format(textColors, textColors))
-phrase = input()
+#Combine everything ready for injection
+element = tagMaker(elementType)
 
 # read contents of input file 
 inputfile = open(inputFileLocation, 'r').readlines()
@@ -56,7 +54,7 @@ with open(outputFileLocation,'w') as write_file:
        
         elif section in line: # Search if current section matches user iputted section for injection
             currentPosition = str(int(currentPosition)+1)
-            string = awsl('<!-- line'+currentPosition+' -->\n', indent) + awsl('<p>'+phrase+'</p> \n', indent) # Premake injection string adding whitespace           
+            string = awsl('<!-- line'+currentPosition+' -->\n', indent) + awsl(element +'\n', indent) # Premake injection string adding whitespace           
             write_file.write(string) # Write injection to file
             write_file.write(line)
         else:
