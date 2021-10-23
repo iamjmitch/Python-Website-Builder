@@ -23,13 +23,13 @@ possibleSections = ['section1','section2', 'section3']
 # ---------------------Start Actual App ---------------------
 cleanHtml()
 #Get injection section
-print('\n{.Bold}Enter Section:{.ResetAll}'.format(textColors, textColors))
-section = input()
+tagLocation = question("Enter Section")
 
 #Check if section is valid
-if section == "":
-    section = "section1"
-if sectionErrorCheck(section, possibleSections) == false:
+if tagLocation == "":
+    tagLocation = "section1"
+    printSystemMessage(tagLocation+ " selected automatically", true)
+if sectionErrorCheck(tagLocation, possibleSections) == false:
     exit()
 
 #Get Injection Element and contents
@@ -52,7 +52,7 @@ with open(outputFileLocation,'w') as write_file:
             currentPosition = re.sub('\D', '', line)
             write_file.write(line)
        
-        elif section in line: # Search if current section matches user iputted section for injection
+        elif tagLocation in line: # Search if current section matches user iputted section for injection
             currentPosition = str(int(currentPosition)+1)
             string = awsl('<!-- line'+currentPosition+' -->\n', indent) + awsl(element +'\n', indent) # Premake injection string adding whitespace           
             write_file.write(string) # Write injection to file
