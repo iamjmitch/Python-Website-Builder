@@ -24,7 +24,7 @@ def question(text, trueOrFalse = false):
                 return False
                 yesNoCheck = true
             else:
-                printWarning("Please enter 'yes' or press the enter key to skip")
+                print(yellow("Please enter 'yes' or press the enter key to skip"))
         else:
             yesNoCheck = true
             return userInput
@@ -52,25 +52,17 @@ def cleanHtml():
         copyfile('index_clean.html', 'index.html')  
 
 
-
-
 # -- Error Reporting --
 
-#print yellow message in console
-def printWarning(message):
-    print('{.Yellow}{message}{.ResetAll}'.format(textColors,textColors, message=message))
+def yellow(message):
+    return '{.Yellow}{message}{.ResetAll}'.format(textColors,textColors, message=message)
 
-#print red message in console
-def printError(message):
-    print('{.Red}{message}{.ResetAll}'.format(textColors,textColors, message=message))
+def red(message):
+    return '{.Red}{message}{.ResetAll}'.format(textColors,textColors, message=message)
 
-#print green message in console
-def printSystemMessage(message, printOnLineAbove = false):
-    if printOnLineAbove == false:
-        
-        print('\x1b[1A\x1b[2K')
-    print('{.Yellow}{message}{.ResetAll}'.format(textColors,textColors, message=message))
-    
+def green(message):
+    return '{.Green}{message}{.ResetAll}'.format(textColors,textColors, message=message)
+
 # Combine all available html sections for error display
 def appendPossbileSections(options):
     temp = ""
@@ -99,14 +91,18 @@ def tagMaker(tag):
             text = question("Paragraph Text")
             html = "<p>"+text+"</p>" 
         elif tag == "img":
-            pass
+            imgSrc = question("Image Source URL")
+            alt = question("Image Description")            
+            html =('<img src="{imgSrc}" alt="{alt}" width="500" height="auto">'.format(alt = alt, imgSrc=imgSrc))            
         elif tag == "h1":
-            pass        
+            text = question("Heading Text")
+            html = "<h1>"+text+"</h1>"       
         else:
             if tag == "":
-                printWarning("Element Selection Cannot Be Left Blank")
+                print(red("Element Selection Cannot Be Left Blank"))
             else:
-                printWarning("'"+tag + "' Is An Invalid Element Tag")
+                print(red("'"+tag + "' Is An Invalid Element Tag. "))
+                print(yellow("Please choose from:\n1: a\n2: p\n3: h1\n4: img"))
             tag = question("Enter Element Type")      
     
     print(html)

@@ -27,8 +27,7 @@ tagLocation = question("Enter Section")
 
 #Check if section is valid
 if tagLocation == "":
-    tagLocation = "section1"
-    printSystemMessage(tagLocation+ " selected automatically", true)
+    tagLocation = "section1"    
 if sectionErrorCheck(tagLocation, possibleSections) == false:
     exit()
 
@@ -46,7 +45,6 @@ with open(outputFileLocation,'w') as write_file:
     for line in inputfile: 
         #tracks line indentation
         indent = len(line) - len(line.lstrip(' ')) 
-
         # Update element counter
         if "<!-- line" in line:
             currentPosition = re.sub('\D', '', line)
@@ -60,7 +58,7 @@ with open(outputFileLocation,'w') as write_file:
         else:
             write_file.write(line)
 
-print ('{.Green}-- Data Added Successfully --\n{.ResetAll}'.format(textColors, textColors))
+print(green("-- Data Added Successfully --\n"))
 
 # Cleanup
 os.remove(inputFileLocation) # Delete input file
